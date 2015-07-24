@@ -1,0 +1,32 @@
+# This file holds a list of GATT UUIDs that websites using the Web
+# Bluetooth API are forbidden from accessing.
+
+## Services
+
+# org.bluetooth.service.human_interface_device
+# Direct access to HID devices like keyboards would let web pages
+# become keyloggers.
+00001812-0000-1000-8000-00805f9b34fb
+
+
+## Characteristics
+
+# org.bluetooth.characteristic.gap.peripheral_privacy_flag
+# Don't let web pages turn off privacy mode.
+00002a02-0000-1000-8000-00805f9b34fb exclude-writes
+
+# org.bluetooth.characteristic.gap.reconnection_address
+# Disallow messing with connection parameters
+00002a03-0000-1000-8000-00805f9b34fb
+
+
+## Descriptors
+
+# org.bluetooth.descriptor.gatt.client_characteristic_configuration
+# Writing to this would let a web page interfere with other pages'
+# notifications and indications.
+00002902-0000-1000-8000-00805f9b34fb exclude-writes
+
+# org.bluetooth.descriptor.gatt.server_characteristic_configuration
+# Writing to this would let a web page interfere with the broadcasted services.
+00002903-0000-1000-8000-00805f9b34fb exclude-writes
