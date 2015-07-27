@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 /// Checks whether its argument is a valid UUID, per
 /// https://webbluetoothcg.github.io/web-bluetooth/#dfn-valid-uuid
 pub fn valid_uuid(uuid: &str) -> bool {
@@ -25,6 +27,7 @@ pub fn valid_uuid(uuid: &str) -> bool {
 /// Checks whether its argument is a blacklist file that's usable in the algorithm at
 /// https://webbluetoothcg.github.io/web-bluetooth/#dfn-parsing-the-blacklist
 pub fn validate_blacklist(blacklist: &str) -> Option<String> {
+    let mut result = HashMap::<&str, &str>::new();
     for (index, line) in blacklist.lines().enumerate() {
         let line_num = index + 1;
         if line.is_empty() || line.starts_with("#") {
@@ -39,14 +42,20 @@ pub fn validate_blacklist(blacklist: &str) -> Option<String> {
                 if !valid_uuid(uuid) {
                     return Some(format!("line {}: '{}' is not a valid UUID", line_num, uuid));
                 }
+                let mut exclusion = "exclude";
                 if tokens.len() == 2 {
-                    let exclusion = tokens[1];
+                    exclusion = tokens[1];
                     match exclusion {
                         "exclude-reads" | "exclude-writes" => (),
                         _ => return Some(format!(
 			    "line {}: '{}' should be 'exclude-reads', or 'exclude-writes'",
 			    line_num, exclusion)),
                     }
+                }
+                if let Some(_) = result.insert(uuid, exclusion) {
+                    return Some(format!(
+                        "line {}: '{}' appears multiple times",
+                        line_num, uuid));
                 }
             },
             _ => return Some(format!("line {}: Too many tokens", line_num)),
@@ -106,6 +115,28 @@ mod tests {
             validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude"));
         assert_eq!(Some("line 1: Too many tokens".to_string()),
                    validate_blacklist("00001812-0000-1000-8000-00805f9b34fb token token"));
+
+        // Check all variants of repeated UUIDs.
+        assert_eq!(
+            Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
+            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb\n\
+                                00001810-0000-1000-8000-00805f9b34fb\n\
+                                00001812-0000-1000-8000-00805f9b34fb\n"));
+        assert_eq!(
+            Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
+            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb\n\
+                                00001810-0000-1000-8000-00805f9b34fb\n\
+                                00001812-0000-1000-8000-00805f9b34fb exclude-reads\n"));
+        assert_eq!(
+            Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
+            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads\n\
+                                00001810-0000-1000-8000-00805f9b34fb\n\
+                                00001812-0000-1000-8000-00805f9b34fb\n"));
+        assert_eq!(
+            Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
+            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads\n\
+                                00001810-0000-1000-8000-00805f9b34fb\n\
+                                00001812-0000-1000-8000-00805f9b34fb exclude-reads\n"));
     }
 
     #[test]
