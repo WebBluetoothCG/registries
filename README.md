@@ -2,7 +2,8 @@
 
 This repository holds files of metadata about Bluetooth entities. The
 [Web Bluetooth specification](https://github.com/WebBluetoothCG/registries)
-refers to this repository for information that may change after it's published.
+refers to this repository for information that may change after it's published
+and defines the file formats here.
 
 ## Blacklist
 

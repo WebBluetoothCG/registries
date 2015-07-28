@@ -34,6 +34,12 @@ pub fn validate_blacklist(blacklist: &str) -> Option<String> {
             // Comment or blank line.
             continue;
         }
+        if line.starts_with(" ") {
+            return Some(format!("line {}: Starts with extraneous space", line_num));
+        }
+        if line.ends_with(" ") {
+            return Some(format!("line {}: Ends with extraneous space", line_num));
+        }
         let tokens: Vec<&str> = line.split(' ').collect();
         match tokens.len() {
             0 => unreachable!("split(' ') never returns an empty array"),
@@ -48,7 +54,7 @@ pub fn validate_blacklist(blacklist: &str) -> Option<String> {
                     match exclusion {
                         "exclude-reads" | "exclude-writes" => (),
                         _ => return Some(format!(
-			    "line {}: '{}' should be 'exclude-reads', or 'exclude-writes'",
+			    "line {}: '{}' should be 'exclude-reads' or 'exclude-writes'",
 			    line_num, exclusion)),
                     }
                 }
@@ -88,12 +94,17 @@ mod tests {
         assert_eq!(Some("line 1: '\r' is not a valid UUID".to_string()),
                    validate_blacklist("\r\n"));
         assert_eq!(None, validate_blacklist("# comment"));
-        assert_eq!(None, validate_blacklist("# comment
-00001812-0000-1000-8000-00805f9b34fb"));
-        // No extraneous spaces.
-        assert_eq!(Some("line 1: Too many tokens".to_string()),
-		   validate_blacklist("  # comment
-  00001812-0000-1000-8000-00805f9b34fb"));
+        assert_eq!(None, validate_blacklist("# comment\n\
+                                             00001812-0000-1000-8000-00805f9b34fb"));
+
+        // No extraneous spaces:
+        assert_eq!(Some("line 1: Starts with extraneous space".to_string()),
+		   validate_blacklist("  # comment"));
+        assert_eq!(Some("line 1: Starts with extraneous space".to_string()),
+		   validate_blacklist(" 00001812-0000-1000-8000-00805f9b34fb"));
+        assert_eq!(Some("line 1: Ends with extraneous space".to_string()),
+		   validate_blacklist("00001812-0000-1000-8000-00805f9b34fb "));
+
         assert_eq!(
 	    Some("line 1: Too many tokens".to_string()),
 	    validate_blacklist("00001812-0000-1000-8000-00805f9b34fb # not a comment"));
@@ -111,7 +122,7 @@ mod tests {
             Some("line 1: 'X0001812-0000-1000-8000-00805f9b34fb' is not a valid UUID".to_string()),
             validate_blacklist("X0001812-0000-1000-8000-00805f9b34fb exclude-reads"));
         assert_eq!(
-            Some("line 1: 'exclude' should be 'exclude-reads', or 'exclude-writes'".to_string()),
+            Some("line 1: 'exclude' should be 'exclude-reads' or 'exclude-writes'".to_string()),
             validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude"));
         assert_eq!(Some("line 1: Too many tokens".to_string()),
                    validate_blacklist("00001812-0000-1000-8000-00805f9b34fb token token"));
