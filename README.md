@@ -7,7 +7,7 @@ and defines the file formats here.
 
 ## Blacklist
 
-[gatt_blacklist.txt](/WebBluetoothCG/registries/blob/master/gatt_blacklist.txt)
+[gatt_blacklist.txt](/gatt_blacklist.txt)
 holds a list of 128-bit GATT UUIDs that
 websites using the Web Bluetooth API are forbidden from accessing.
 This includes all of Services, Characteristics, and Descriptors.
