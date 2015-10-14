@@ -3,6 +3,15 @@
 
 ## Services
 
+# org.bluetooth.service.generic_access and
+# org.bluetooth.service.generic_attribute
+# These fundamental services are part of the GATT protocol rather than
+# per-device data. Several platforms don't allow the browser to access them
+# directly, and most of their data is exposed through other properties on the
+# BluetoothDevice.
+00001800-0000-1000-8000-00805f9b34fb
+00001801-0000-1000-8000-00805f9b34fb
+
 # org.bluetooth.service.human_interface_device
 # Direct access to HID devices like keyboards would let web pages
 # become keyloggers.
@@ -10,14 +19,6 @@
 
 
 ## Characteristics
-
-# org.bluetooth.characteristic.gap.peripheral_privacy_flag
-# Don't let web pages turn off privacy mode.
-00002a02-0000-1000-8000-00805f9b34fb exclude-writes
-
-# org.bluetooth.characteristic.gap.reconnection_address
-# Disallow messing with connection parameters
-00002a03-0000-1000-8000-00805f9b34fb
 
 
 ## Descriptors
