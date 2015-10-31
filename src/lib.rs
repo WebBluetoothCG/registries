@@ -28,7 +28,7 @@ pub fn valid_uuid(uuid: &str) -> bool {
 /// https://webbluetoothcg.github.io/web-bluetooth/#dfn-parsing-the-blacklist
 pub fn validate_blacklist(blacklist: &str) -> Option<String> {
     let mut result = HashMap::<&str, &str>::new();
-    for (index, line) in blacklist.lines().enumerate() {
+    for (index, line) in blacklist.split('\n').enumerate() {
         let line_num = index + 1;
         if line.is_empty() || line.starts_with("#") {
             // Comment or blank line.
