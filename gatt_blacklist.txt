@@ -23,6 +23,11 @@
 # Block access to standardized unique identifiers, for privacy reasons.
 00002a25-0000-1000-8000-00805f9b34fb
 
+# Random UUID for testing a characteristic excluding reads.
+# Should be removed from this blacklist if a characteristic excluding reads
+# is added.
+bad1c9a2-9a5b-4015-8b60-1579bbbf2135 exclude-reads
+
 
 ## Descriptors
 
@@ -34,3 +39,13 @@
 # org.bluetooth.descriptor.gatt.server_characteristic_configuration
 # Writing to this would let a web page interfere with the broadcasted services.
 00002903-0000-1000-8000-00805f9b34fb exclude-writes
+
+# Random UUID for testing an excluded descriptor.
+# Should be removed from this blacklist if an excluded descriptor
+# is added.
+bad2ddcf-60db-45cd-bef9-fd72b153cf7c
+
+# Random UUID for testing a descriptor excluding reads.
+# Should be removed from this blacklist if a descriptor excluding reads
+# is added.
+bad3ec61-3cc3-4954-9702-7977df514114 exclude-reads
