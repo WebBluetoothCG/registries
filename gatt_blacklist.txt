@@ -9,7 +9,12 @@
 00001812-0000-1000-8000-00805f9b34fb
 
 # Firmware update services that don't check the update's signature
-# present too much of a phishing risk to expose to the open web.
+# present a risk of devices' software being modified by malicious web
+# pages. Users may connect to a device believing they are enabling
+# only simple interaction or that they're interacting with the
+# device's manufacturer, but the site might instead persistently
+# compromise the device.
+#
 # Nordic's Device Firmware Update service:
 00001530-1212-efde-1523-785feabcd123
 # TI's Over-the-Air Download service:
