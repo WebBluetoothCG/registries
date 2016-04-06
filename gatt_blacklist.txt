@@ -8,6 +8,13 @@
 # become keyloggers.
 00001812-0000-1000-8000-00805f9b34fb
 
+# Firmware update services that don't check the update's signature
+# present too much of a phishing risk to expose to the open web.
+# Nordic's Device Firmware Update service:
+00001530-1212-efde-1523-785feabcd123
+# TI's Over-the-Air Download service:
+f000ffc0-0451-4000-b000-000000000000
+
 
 ## Characteristics
 
