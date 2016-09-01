@@ -20,6 +20,14 @@
 # TI's Over-the-Air Download service, http://www.ti.com/lit/ug/swru271g/swru271g.pdf:
 f000ffc0-0451-4000-b000-000000000000
 
+# The FIDO Bluetooth Specification at
+# https://fidoalliance.org/specs/fido-u2f-bt-protocol-id-20150514.pdf
+# section 6.7.1 "Bluetooth pairing: Client considerations" warns that
+# system-wide pairing poses security risks. Specifically, a website
+# could use raw GATT commands to impersonate another website to the
+# FIDO device.
+0000fffd-0000-1000-8000-00805f9b34fb
+
 
 ## Characteristics
 
