@@ -19,7 +19,10 @@
 00001530-1212-efde-1523-785feabcd123
 # TI's Over-the-Air Download service, http://www.ti.com/lit/ug/swru271g/swru271g.pdf:
 f000ffc0-0451-4000-b000-000000000000
-# Cypress's Bootloader service, http://www.cypress.com/file/175561/download:
+# Cypress's Bootloader service. Documentation at
+# http://www.cypress.com/file/175561/download requires an account.
+# Linked as CYPRESS BOOTLOADER SERVICE_001-97547.pdf from
+# http://www.cypress.com/documentation/software-and-drivers/cypresss-custom-ble-profiles-and-services:
 00060000-0000-1000-8000-00805f9b34fb
 
 # The FIDO Bluetooth Specification at
