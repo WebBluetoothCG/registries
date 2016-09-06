@@ -15,7 +15,7 @@
 # device's manufacturer, but the site might instead persistently
 # compromise the device.
 #
-# Nordic's Device Firmware Update service, http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v11.0.0/examples_ble_dfu.html:
+# Nordic's Legacy Device Firmware Update service, http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v11.0.0/examples_ble_dfu.html:
 00001530-1212-efde-1523-785feabcd123
 # TI's Over-the-Air Download service, http://www.ti.com/lit/ug/swru271g/swru271g.pdf:
 f000ffc0-0451-4000-b000-000000000000
