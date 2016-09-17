@@ -14,4 +14,4 @@ This includes all of Services, Characteristics, and Descriptors.
 
 This file contains comments in lines starting with `#`.
 Non-comment lines contain a [valid UUID](https://webbluetoothcg.github.io/web-bluetooth/#dfn-valid-uuid)
-followed optionally by a space and one of the tokens "`exclude-reads`" or "`excludes-writes`".
+followed optionally by a space and one of the tokens "`exclude-reads`" or "`exclude-writes`".
