@@ -35,6 +35,15 @@ we can't protect the first group of devices without unnecessarily breaking the s
 There's necessarily a judgement call here,
 that's resolved by an informal cost/benefit analysis.
 
+## Pure communication protocols generally won't be blacklisted
+
+A GATT service that encodes a communication protocol with no indication of its meaning
+is too broadly usable to say whether the service itself is secure or insecure,
+so we generally won't be able to blacklist the whole service
+even if some devices are critically vulnerable to websites using that service.
+We recommend that devices use precise UUIDs instead of generic ones
+so that they can take advantage of blacklisting.
+
 ## Examples
 
 ### FIDO
