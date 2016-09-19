@@ -4,6 +4,8 @@
 
 There is currently no minimum or maximum time between
 when the issue is filed and when the new UUID is added to the blacklist.
+If a device is actively being exploited, we'll try to make a decision quickly,
+and implementations should also be able to deploy these changes quickly.
 
 ## Blacklisting by an attribute's creator is preferred
 
