@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 /// Checks whether its argument is a valid UUID, per
-/// https://webbluetoothcg.github.io/web-bluetooth/#dfn-valid-uuid
+/// https://webbluetoothcg.github.io/web-bluetooth/#valid-uuid
 pub fn valid_uuid(uuid: &str) -> bool {
     if uuid.len() != 36 {
         return false;
@@ -24,11 +24,11 @@ pub fn valid_uuid(uuid: &str) -> bool {
     return true;
 }
 
-/// Checks whether its argument is a blacklist file that's usable in the algorithm at
-/// https://webbluetoothcg.github.io/web-bluetooth/#dfn-parsing-the-blacklist
-pub fn validate_blacklist(blacklist: &str) -> Option<String> {
+/// Checks whether its argument is a blocklist file that's usable in the algorithm at
+/// https://webbluetoothcg.github.io/web-bluetooth/#parsing-the-blocklist
+pub fn validate_blocklist(blocklist: &str) -> Option<String> {
     let mut result = HashMap::<&str, &str>::new();
-    for (index, line) in blacklist.split('\n').enumerate() {
+    for (index, line) in blocklist.split('\n').enumerate() {
         let line_num = index + 1;
         if line.is_empty() || line.starts_with("#") {
             // Comment or blank line.
@@ -88,78 +88,78 @@ mod tests {
     }
 
     #[test]
-    fn test_validate_blacklist() {
-        assert_eq!(None, validate_blacklist(""));
+    fn test_validate_blocklist() {
+        assert_eq!(None, validate_blocklist(""));
         // Lines are terminated by \n, not \r\n.
         assert_eq!(Some("line 1: '\r' is not a valid UUID".to_string()),
-                   validate_blacklist("\r\n"));
-        assert_eq!(None, validate_blacklist("# comment"));
-        assert_eq!(None, validate_blacklist("# comment\n\
+                   validate_blocklist("\r\n"));
+        assert_eq!(None, validate_blocklist("# comment"));
+        assert_eq!(None, validate_blocklist("# comment\n\
                                              00001812-0000-1000-8000-00805f9b34fb"));
 
         // No extraneous spaces:
         assert_eq!(Some("line 1: Starts with extraneous space".to_string()),
-		   validate_blacklist("  # comment"));
+		   validate_blocklist("  # comment"));
         assert_eq!(Some("line 1: Starts with extraneous space".to_string()),
-		   validate_blacklist(" 00001812-0000-1000-8000-00805f9b34fb"));
+		   validate_blocklist(" 00001812-0000-1000-8000-00805f9b34fb"));
         assert_eq!(Some("line 1: Ends with extraneous space".to_string()),
-		   validate_blacklist("00001812-0000-1000-8000-00805f9b34fb "));
+		   validate_blocklist("00001812-0000-1000-8000-00805f9b34fb "));
 
         assert_eq!(
 	    Some("line 1: Too many tokens".to_string()),
-	    validate_blacklist("00001812-0000-1000-8000-00805f9b34fb # not a comment"));
+	    validate_blocklist("00001812-0000-1000-8000-00805f9b34fb # not a comment"));
         assert_eq!(
             Some("line 1: 'X0001812-0000-1000-8000-00805f9b34fb' is not a valid UUID".to_string()),
-            validate_blacklist("X0001812-0000-1000-8000-00805f9b34fb"));
+            validate_blocklist("X0001812-0000-1000-8000-00805f9b34fb"));
         assert_eq!(None,
-                   validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads"));
+                   validate_blocklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads"));
         assert_eq!(None,
-                   validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude-writes"));
+                   validate_blocklist("00001812-0000-1000-8000-00805f9b34fb exclude-writes"));
         assert_eq!(
             Some("line 1: '00001812-0000-1000-8000-00805f9b34fb\u{A0}exclude-reads' is not a valid UUID".to_string()),
-            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb\u{A0}exclude-reads"));
+            validate_blocklist("00001812-0000-1000-8000-00805f9b34fb\u{A0}exclude-reads"));
         assert_eq!(
             Some("line 1: 'X0001812-0000-1000-8000-00805f9b34fb' is not a valid UUID".to_string()),
-            validate_blacklist("X0001812-0000-1000-8000-00805f9b34fb exclude-reads"));
+            validate_blocklist("X0001812-0000-1000-8000-00805f9b34fb exclude-reads"));
         assert_eq!(
             Some("line 1: 'exclude' should be 'exclude-reads' or 'exclude-writes'".to_string()),
-            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude"));
+            validate_blocklist("00001812-0000-1000-8000-00805f9b34fb exclude"));
         assert_eq!(Some("line 1: Too many tokens".to_string()),
-                   validate_blacklist("00001812-0000-1000-8000-00805f9b34fb token token"));
+                   validate_blocklist("00001812-0000-1000-8000-00805f9b34fb token token"));
 
         // Check all variants of repeated UUIDs.
         assert_eq!(
             Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
-            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb\n\
+            validate_blocklist("00001812-0000-1000-8000-00805f9b34fb\n\
                                 00001810-0000-1000-8000-00805f9b34fb\n\
                                 00001812-0000-1000-8000-00805f9b34fb\n"));
         assert_eq!(
             Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
-            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb\n\
+            validate_blocklist("00001812-0000-1000-8000-00805f9b34fb\n\
                                 00001810-0000-1000-8000-00805f9b34fb\n\
                                 00001812-0000-1000-8000-00805f9b34fb exclude-reads\n"));
         assert_eq!(
             Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
-            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads\n\
+            validate_blocklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads\n\
                                 00001810-0000-1000-8000-00805f9b34fb\n\
                                 00001812-0000-1000-8000-00805f9b34fb\n"));
         assert_eq!(
             Some("line 3: '00001812-0000-1000-8000-00805f9b34fb' appears multiple times".to_string()),
-            validate_blacklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads\n\
+            validate_blocklist("00001812-0000-1000-8000-00805f9b34fb exclude-reads\n\
                                 00001810-0000-1000-8000-00805f9b34fb\n\
                                 00001812-0000-1000-8000-00805f9b34fb exclude-reads\n"));
     }
 
     #[test]
-    fn validate_gatt_blacklist() {
-	let filename = "gatt_blacklist.txt";
+    fn validate_gatt_blocklist() {
+	let filename = "gatt_blocklist.txt";
         let content = File::open(filename).and_then(|mut file| {
             let mut result = String::new();
             try!(file.read_to_string(&mut result));
             Ok(result)
         }).unwrap_or_else(|e| { panic!("Error reading {}: {}", filename, e) });
 
-        if let Some(error) = validate_blacklist(&content) {
+        if let Some(error) = validate_blocklist(&content) {
 	    panic!("{} is invalid: {}", filename, error);
 	}
     }
