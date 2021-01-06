@@ -33,6 +33,9 @@ f000ffc0-0451-4000-b000-000000000000
 # FIDO device.
 0000fffd-0000-1000-8000-00805f9b34fb
 
+# fde2 is assigned to Google and used for pairingless FIDO
+# https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
+0000fde2-0000-1000-8000-00805f9b34fb
 
 ## Characteristics
 
