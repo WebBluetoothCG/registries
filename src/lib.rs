@@ -15,7 +15,7 @@ pub fn valid_uuid(uuid: &str) -> bool {
             }
             _ => {
                 match char {
-                    '0' ... '9' | 'a' ... 'f' => (),
+                    '0' ..= '9' | 'a' ..= 'f' => (),
                     _ => return false,
                 }
             }
@@ -155,7 +155,7 @@ mod tests {
 	let filename = "gatt_blocklist.txt";
         let content = File::open(filename).and_then(|mut file| {
             let mut result = String::new();
-            try!(file.read_to_string(&mut result));
+            file.read_to_string(&mut result)?;
             Ok(result)
         }).unwrap_or_else(|e| { panic!("Error reading {}: {}", filename, e) });
 
