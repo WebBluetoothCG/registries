@@ -1,0 +1,18 @@
+# This file holds a list of human-readable names for standardized GATT
+# descriptors and their UUIDs to use with the Web Bluetooth API.
+
+gatt.characteristic_extended_properties 00002900-0000-1000-8000-00805f9b34fb
+gatt.characteristic_user_description 00002901-0000-1000-8000-00805f9b34fb
+gatt.client_characteristic_configuration 00002902-0000-1000-8000-00805f9b34fb
+gatt.server_characteristic_configuration 00002903-0000-1000-8000-00805f9b34fb
+gatt.characteristic_presentation_format 00002904-0000-1000-8000-00805f9b34fb
+gatt.characteristic_aggregate_format 00002905-0000-1000-8000-00805f9b34fb
+valid_range 00002906-0000-1000-8000-00805f9b34fb
+external_report_reference 00002907-0000-1000-8000-00805f9b34fb
+report_reference 00002908-0000-1000-8000-00805f9b34fb
+number_of_digitals 00002909-0000-1000-8000-00805f9b34fb
+value_trigger_setting 0000290A-0000-1000-8000-00805f9b34fb
+es_configuration 0000290B-0000-1000-8000-00805f9b34fb
+es_measurement 0000290C-0000-1000-8000-00805f9b34fb
+es_trigger_setting 0000290D-0000-1000-8000-00805f9b34fb
+time_trigger_setting 0000290E-0000-1000-8000-00805f9b34fb
