@@ -1,5 +1,7 @@
 # This file holds a list of human-readable names for standardized GATT
 # characteristics and their UUIDs to use with the Web Bluetooth API.
+# Those are not based on the Bluetooth Assigned Numbers document. They're based
+# on what is in Chromium as of June 2018.
 
 gap.device_name 00002A00-0000-1000-8000-00805f9b34fb
 gap.appearance 00002A01-0000-1000-8000-00805f9b34fb

@@ -1,5 +1,7 @@
 # This file holds a list of human-readable names for standardized GATT services
 # and their UUIDs to use with the Web Bluetooth API.
+# Those are not based on the Bluetooth Assigned Numbers document. They're based
+# on what is in Chromium as of June 2018.
 
 generic_access 00001800-0000-1000-8000-00805f9b34fb
 generic_attribute 00001801-0000-1000-8000-00805f9b34fb
