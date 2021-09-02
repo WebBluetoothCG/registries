@@ -1,7 +1,10 @@
 # This file holds a list of human-readable names for standardized GATT
 # descriptors and their UUIDs to use with the Web Bluetooth API.
-# Those are not based on the Bluetooth Assigned Numbers document. They're based
-# on what is in Chromium as of June 2018.
+# These values are based on the mappings implemented by Chromium as of 2018-06-13
+# which are based the version of the Bluetooth Assigned Numbers document published
+# at that time.
+#
+# https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/modules/bluetooth/bluetooth_uuid.cc;drc=18f27659d87f9464ea5b98022812f054ba5c480b
 
 gatt.characteristic_extended_properties 00002900-0000-1000-8000-00805f9b34fb
 gatt.characteristic_user_description 00002901-0000-1000-8000-00805f9b34fb
