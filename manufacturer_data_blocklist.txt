@@ -1,0 +1,6 @@
+# This file holds a list of manufacturer data that websites using the Web
+# Bluetooth API are forbidden from accessing.
+
+# iBeacon's proximity UUID might reveal user's location information.
+# See https://en.wikipedia.org/wiki/IBeacon for detail.
+manufacturer 4c advdata-02/ff
