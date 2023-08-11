@@ -14,14 +14,20 @@ This includes all of Services, Characteristics, and Descriptors.
 
 [manufacturer_data_blocklist.txt](/manufacturer_data_blocklist.txt)
 holds a list of manufacturer data that websites using the Web Bluetooth API are forbidden from accessing.
-Each entry of the list is consist of company identifier and data prefix that should be blocked.
+Each entry of the list consists of a company identifier and data prefix that should be blocked.
 
 These files contain comments in lines starting with `#`.
 Non-comment lines contain one of these:
   * A [valid UUID](https://webbluetoothcg.github.io/web-bluetooth/#valid-uuid)
 followed optionally by a space and one of the tokens "`exclude-reads`" or "`exclude-writes`".
-  *  The word `manufacturer` followed by a space and a group of hexadecimal digits (at most four hex digits)
-  that represents a company identifier. A space after that, is `advdata-` followed by a data prefix with mask.
+  *  The word `manufacturer` followed by a space and a group of hexadecimal digits (at most four
+  hexadecimal digits) that represents a company identifier, whcih can be found on the
+  [Bluetooth Assigned Numbers website](https://www.bluetooth.com/specifications/assigned-numbers).
+  A space after that is an advertising data prefix in the format `advdata-<data>/<mask>`, where
+  `data` and `mask` are strings of hexadecimal digits of the same length. The byte order of the
+  data prefix is from left to right. An advertising data matches the data prefix if each byte of
+  the advertising data is equal to the corresponding byte of the data prefix after both are
+  ANDed with the corresponding byte of the mask.
 
 ## Assigned numbers
 
