@@ -24,7 +24,7 @@ followed optionally by a space and one of the tokens "`exclude-reads`" or "`excl
   hexadecimal digits) that represents a company identifier, which can be found on the
   [Bluetooth Assigned Numbers website](https://www.bluetooth.com/specifications/assigned-numbers).
   A space after that is an advertising data prefix in the format `advdata-<data>/<mask>`, where
-  `data` and `mask` are strings of hexadecimal digits of the same length. `data` is a sequence of bytes
+  `data` and `mask` are strings of hexadecimal digits of the same length. `data` is a sequence of bytes.
   A data prefix matches an advertising data if each byte of the prefix is equal to the corresponding byte
   of the advertising data after both are ANDed with the corresponding byte of the mask. For example,
   `advdata-001100/00FF00` would match advertising data such as `11` `11` `11`, or `00` `11` `22`, etc.
