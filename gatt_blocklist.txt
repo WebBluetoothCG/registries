@@ -24,6 +24,8 @@ f000ffc0-0451-4000-b000-000000000000
 # Linked as CYPRESS BOOTLOADER SERVICE_001-97547.pdf from
 # http://www.cypress.com/documentation/software-and-drivers/cypresss-custom-ble-profiles-and-services:
 00060000-0000-1000-8000-00805f9b34fb
+# Qualcomm (CSR) Over-the-air Update service, https://www.csrsupport.com/download/49800/CS-327746-RP-1-Training%20and%20Tutorials%20-%20CSR%20Over-the-Air-Update.pdf
+00001016-d102-11e1-9b23-00025b00a5a5
 
 # The FIDO Bluetooth Specification at
 # https://fidoalliance.org/specs/fido-u2f-bt-protocol-id-20150514.pdf
