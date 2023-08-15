@@ -1,5 +1,21 @@
 use std::collections::HashMap;
 
+pub fn valid_hex_digit(digit: char) -> bool {
+    return digit.is_ascii_digit() || (digit.is_ascii_lowercase() && digit.is_ascii_hexdigit());
+}
+
+pub fn valid_hex_string(hex_string: &str) -> bool {
+    let mut chars = hex_string.chars();
+
+    while let Some(char) = chars.next() {
+        if !valid_hex_digit(char) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 /// Checks whether its argument is a valid UUID, per
 /// https://webbluetoothcg.github.io/web-bluetooth/#valid-uuid
 pub fn valid_uuid(uuid: &str) -> bool {
@@ -14,12 +30,43 @@ pub fn valid_uuid(uuid: &str) -> bool {
                 }
             }
             _ => {
-                match char {
-                    '0' ..= '9' | 'a' ..= 'f' => (),
-                    _ => return false,
+                if !valid_hex_digit(char) {
+                    return false;
                 }
             }
         }
+    }
+    return true;
+}
+
+/// Checks whether its argument is a valid company identifer, per
+/// https://webbluetoothcg.github.io/web-bluetooth/#valid-company-identifier
+pub fn valid_company_identifier(company_identifier: &str) -> bool {
+    if company_identifier.len() == 0 || company_identifier.len() > 4 {
+        return false;
+    }
+    if !valid_hex_string(company_identifier) {
+        return false;
+    }
+    return true;
+}
+
+/// Checks whether its argument is a valid advertise data prefix, per
+/// https://webbluetoothcg.github.io/web-bluetooth/#valid-advertise-data-prefix
+pub fn valid_advertise_data_prefix(data_prefix: &str) -> bool {
+    let tokens: Vec<&str> = data_prefix.split('-').collect();
+    if tokens.len() != 2 {
+        return false;
+    }
+    if tokens[0] != "advdata" {
+        return false;
+    }
+    let pair: Vec<&str> = tokens[1].split('/').collect();
+    if pair.len() != 2 || pair[0].len() != pair[1].len() {
+        return false;
+    }
+    if !valid_hex_string(pair[0]) || !valid_hex_string(pair[1]) {
+        return false;
     }
     return true;
 }
@@ -64,6 +111,20 @@ pub fn validate_blocklist(blocklist: &str) -> Option<String> {
                         line_num, uuid));
                 }
             },
+            3 => {
+                if tokens[0] != "manufacturer" {
+                    return Some(format!(
+                        "line {}: Invalid token '{}' for manufacturer data", line_num, tokens[0]));
+                }
+                if !valid_company_identifier(tokens[1]) {
+                    return Some(format!(
+                        "line {}: Invalid company identifier '{}'", line_num, tokens[1]));
+                }
+                if !valid_advertise_data_prefix(tokens[2]) {
+                    return Some(format!(
+                        "line {}: Invalid advertise data prefix '{}'", line_num, tokens[2]));
+                }
+            },
             _ => return Some(format!("line {}: Too many tokens", line_num)),
         }
     }
@@ -85,6 +146,29 @@ mod tests {
 	assert!(!valid_uuid("01234567-89ab-cdef-0123-456789abcdef0"));
 	assert!(!valid_uuid("0123456789abcdef0123456789abcdef"));
 	assert!(!valid_uuid("01234567089ab0cdef001230456789abcdef"));
+    }
+
+    #[test]
+    fn test_valid_company_identifier() {
+        assert!(valid_company_identifier("4c"));
+        assert!(valid_company_identifier("04c"));
+        assert!(valid_company_identifier("004c"));
+        assert!(!valid_company_identifier("4C"));
+        assert!(!valid_company_identifier("0004C"));
+        assert!(!valid_company_identifier("h"));
+        assert!(!valid_company_identifier(""));
+    }
+
+    #[test]
+    fn test_valid_advertise_data_prefix() {
+        assert!(valid_advertise_data_prefix("advdata-02/ff"));
+        assert!(valid_advertise_data_prefix("advdata-0277/ff1c"));
+        assert!(!valid_advertise_data_prefix("ad-02/ff"));
+        assert!(!valid_advertise_data_prefix("advdata-02-ff"));
+        assert!(!valid_advertise_data_prefix("advdata-027/ff"));
+        assert!(!valid_advertise_data_prefix("advdata-027"));
+        assert!(!valid_advertise_data_prefix("advdata-027/f"));
+        assert!(!valid_advertise_data_prefix("advdata-027/FF"));
     }
 
     #[test]
@@ -124,8 +208,14 @@ mod tests {
         assert_eq!(
             Some("line 1: 'exclude' should be 'exclude-reads' or 'exclude-writes'".to_string()),
             validate_blocklist("00001812-0000-1000-8000-00805f9b34fb exclude"));
-        assert_eq!(Some("line 1: Too many tokens".to_string()),
+        assert_eq!(Some("line 1: Invalid token '00001812-0000-1000-8000-00805f9b34fb' for manufacturer data".to_string()),
                    validate_blocklist("00001812-0000-1000-8000-00805f9b34fb token token"));
+        assert_eq!(
+            Some("line 1: Invalid company identifier '0004c'".to_string()),
+            validate_blocklist("manufacturer 0004c advdata-02/ff"));
+        assert_eq!(
+            Some("line 1: Invalid advertise data prefix 'advdata-02/fff'".to_string()),
+            validate_blocklist("manufacturer 4c advdata-02/fff"));
 
         // Check all variants of repeated UUIDs.
         assert_eq!(
@@ -153,6 +243,20 @@ mod tests {
     #[test]
     fn validate_gatt_blocklist() {
 	let filename = "gatt_blocklist.txt";
+        let content = File::open(filename).and_then(|mut file| {
+            let mut result = String::new();
+            file.read_to_string(&mut result)?;
+            Ok(result)
+        }).unwrap_or_else(|e| { panic!("Error reading {}: {}", filename, e) });
+
+        if let Some(error) = validate_blocklist(&content) {
+	    panic!("{} is invalid: {}", filename, error);
+	}
+    }
+
+    #[test]
+    fn validate_manufacturer_data_blocklist() {
+	let filename = "manufacturer_data_blocklist.txt";
         let content = File::open(filename).and_then(|mut file| {
             let mut result = String::new();
             file.read_to_string(&mut result)?;
